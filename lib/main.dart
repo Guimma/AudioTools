@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-const request = "https://api.hgbrasil.com/finance?format=json&key=2ca1648f";
-
 void main() async {
   runApp(MaterialApp(
       home: Home(),
       theme: ThemeData(
-        hintColor: Colors.deepOrange,
+        hintColor: Colors.orange,
         primaryColor: Colors.white,
       )));
 }
@@ -17,28 +15,27 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  
   final frequencyController = TextEditingController();
   final waveController = TextEditingController();
   final periodController = TextEditingController();
-  final soundSpeed = 343;
+  final soundSpeed = 346;
 
-  void _frequencyChange(String value){
+  void _frequencyChange(String value) {
     double frequency = double.parse(value);
-    periodController.text = (1/frequency).toStringAsFixed(4);
-    waveController.text = (soundSpeed/frequency).toStringAsFixed(4);
+    periodController.text = (1 / frequency * 1000).toStringAsFixed(3);
+    waveController.text = (soundSpeed / frequency).toStringAsFixed(3);
   }
 
-  void _waveChange(String value){
+  void _waveChange(String value) {
     double wave = double.parse(value);
-    frequencyController.text = (soundSpeed/wave).toStringAsFixed(2);
-    periodController.text = (1/(soundSpeed/wave)).toStringAsFixed(2);
+    frequencyController.text = (soundSpeed / wave).toStringAsFixed(0);
+    periodController.text = (1000 / (soundSpeed / wave)).toStringAsFixed(3);
   }
 
-  void _periodChange(String value){
+  void _periodChange(String value) {
     double period = double.parse(value);
-    frequencyController.text = (1/period).toStringAsFixed(2);
-    waveController.text = (soundSpeed/(1/period)).toStringAsFixed(2);
+    frequencyController.text = (1000 / period).toStringAsFixed(0);
+    waveController.text = (soundSpeed / ((1 / period) * 1000)).toStringAsFixed(3);
   }
 
   @override
@@ -47,41 +44,41 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.black,
         appBar: AppBar(
           title: Text("Audio Tools"),
-          backgroundColor: Colors.deepOrange,
+          backgroundColor: Colors.orange,
           centerTitle: true,
         ),
-        body: 
-          SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 75.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Icon(Icons.surround_sound,
-                      size: 125.0, color: Colors.deepOrange),
-                  buildTextField("Frequency", "Heartz", frequencyController, _frequencyChange),
-                  Divider(),
-                  buildTextField("Wave Length", "meters", waveController, _waveChange),
-                  Divider(),
-                  buildTextField("Period", "miliseconds", periodController, _periodChange)
-                ]),
-          )
-        );
+        body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 75.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Icon(Icons.surround_sound, size: 125.0, color: Colors.orange),
+            buildTextField(
+                "Frequency", "Hz", frequencyController, _frequencyChange),
+            Divider(),
+            buildTextField(
+                "Wave Length", "m", waveController, _waveChange),
+            Divider(),
+            buildTextField(
+                "Period", "ms", periodController, _periodChange)
+          ]),
+        ));
   }
 }
 
-Widget buildTextField(String label, String suffix, TextEditingController controller, Function function) {
+Widget buildTextField(String label, String suffix,
+    TextEditingController controller, Function function) {
   return TextField(
     controller: controller,
     keyboardType: TextInputType.number,
     onChanged: function,
     decoration: InputDecoration(
-        hintStyle: TextStyle(color: Colors.deepOrange),
+        hintStyle: TextStyle(color: Colors.orange),
         labelText: label,
         suffixText: suffix,
-        labelStyle: TextStyle(color: Colors.deepOrange),
+        labelStyle: TextStyle(color: Colors.orange),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepOrange, width: 0.0)),
+            borderSide: BorderSide(color: Colors.orange, width: 0.0)),
         border: OutlineInputBorder()),
-    style: TextStyle(color: Colors.deepOrange, fontSize: 18.0),
+    style: TextStyle(color: Colors.orange, fontSize: 18.0),
   );
 }
